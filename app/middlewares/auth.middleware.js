@@ -6,21 +6,21 @@ module.exports = (role) => async (req, res, next) => {
   const { authorization } = req.headers;
   const token = authorization.split(" ").pop();
   if (!token) {
-    return res.status(401).message({ message: "Unauthorized!" });
+    return res.status(401).send({ message: "Unauthorized!" });
   }
-  jwt.decode(token, tokenSecret, async (err, decoded) => {
+  return jwt.verify(token, tokenSecret, async (err, decoded) => {
     if (err) {
-      return res.status(401).message({ message: "Unauthorized!" });
+      return res.status(401).send({ message: "Unauthorized!" });
     }
     const user = decoded.user;
     if (!user) {
-      return res.status(401).message({ message: "Unauthorized!" });
+      return res.status(401).send({ message: "Unauthorized!" });
     }
     const userDoc = await User.findById(user).select("-password");
     if (userDoc && userDoc.role === role) {
       req.user = userDoc;
       return next();
     }
-    return res.status(401).message({ message: "Unauthorized!" });
+    return res.status(401).send({ message: "Unauthorized!" });
   });
 };

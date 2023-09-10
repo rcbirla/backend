@@ -42,7 +42,14 @@ module.exports = {
       return res.status(500).send({ message: error.message || "Server error" });
     }
   },
-  update: async (req, res, next) => {
+  getMe: async (req, res) => {
+    try {
+      return res.send({ message: "Success!", data: req.user });
+    } catch (error) {
+      return res.status(500).send({ message: error.message || "Server error" });
+    }
+  },
+  update: async (req, res) => {
     try {
       const { name, role } = req.body;
       const user = await User.findByIdAndUpdate(

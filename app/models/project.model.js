@@ -3,7 +3,15 @@ const mongoose = require("mongoose");
 const SocialMediaSchema = new mongoose.Schema({
   platform: {
     type: String,
-    enum: ["linkedin", "instagram", "facebook", "twitter"],
+    enum: [
+      "instagram",
+      "facebook",
+      "twitter",
+      "spotify",
+      "threads",
+      "snapchat",
+      "pinterest",
+    ],
     required: true,
   },
   url: {
@@ -47,6 +55,11 @@ const ProjectSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    reportingStatus: {
+      type: String,
+      enum: ["early", "on_time", "late"],
+      required: true,
+    },
     level: {
       type: String,
       required: true,
@@ -60,8 +73,11 @@ const ProjectSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    aim: {
+    jointProjectWith: {
       type: String,
+      required: function () {
+        return this.isJointProject;
+      },
       default: "",
     },
     aim: {
@@ -96,7 +112,7 @@ const ProjectSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    coverImage: {
+    coverImageUrl: {
       type: String,
       required: true,
     },
@@ -107,6 +123,22 @@ const ProjectSchema = new mongoose.Schema(
     socialMediaLinks: {
       type: [SocialMediaSchema],
       default: [],
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    projectId: {
+      type: String,
+      index: {
+        unique: true,
+      },
+      required: true,
+    },
+    isDraft: {
+      type: Boolean,
+      default: false,
     },
   },
   {
