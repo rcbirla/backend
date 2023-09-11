@@ -18,7 +18,7 @@ module.exports = (role) => async (req, res, next) => {
         return res.status(401).send({ message: "Unauthorized!" });
       }
       const userDoc = await User.findById(user).select("-password");
-      if (userDoc && userDoc.role === role) {
+      if ((userDoc && userDoc.role === role) || !role) {
         req.user = userDoc;
         return next();
       }
