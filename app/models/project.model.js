@@ -140,6 +140,14 @@ const ProjectSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    reportingMonth: {
+      type: String,
+      required: true,
+    },
+    reportingQuarter: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

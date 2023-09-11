@@ -1,5 +1,21 @@
 const moment = require("moment");
 const Project = require("../models/project.model");
+
+function getReportingQuarter(month) {
+  switch (true) {
+    case month >= 7 && month <= 9:
+      return "QUARTER 1";
+      break;
+    case month >= 10 && month <= 12:
+      return "QUARTER 2";
+      break;
+    case month >= 1 && month <= 3:
+      return "QUARTER 3";
+      break;
+    default:
+      return "QUARTER 4";
+  }
+}
 module.exports = {
   getAll: async (req, res) => {
     try {
@@ -22,7 +38,7 @@ module.exports = {
     try {
       const { startDate, endDate } = req.body;
       const nextMonth10Date = moment(startDate)
-        .date(10)
+        .date(3)
         .month(moment(startDate).month() + 1);
       let reportingStatus = "late";
       if (Math.abs(moment(startDate).diff(moment(endDate), "days") <= 6)) {
@@ -36,6 +52,8 @@ module.exports = {
         reportingStatus,
         createdBy: req.user._id,
         projectId,
+        reportingMonth: moment(endDate).format("MMMM"),
+        reportingQuarter: getReportingQuarter(moment(endDate).month() + 1),
       }).save();
       return res.send({
         message: "Project created!",
