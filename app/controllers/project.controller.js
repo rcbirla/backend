@@ -34,6 +34,7 @@ function getReportingStatus(startDate, endDate) {
   }
   return reportingStatus;
 }
+
 module.exports = {
   getAll: async (req, res) => {
     try {
@@ -76,10 +77,11 @@ module.exports = {
   update: async (req, res, next) => {
     try {
       const { projectId } = req.params;
-      const { _id, ...props } = req.body;
+      const { _id, startDate, endDate, ...props } = req.body;
+      const reportingStatus = getReportingStatus(startDate, endDate);
       const project = await Project.findByIdAndUpdate(
         projectId,
-        { ...props },
+        { ...props, reportingStatus, startDate, endDate },
         {
           new: true,
         }
