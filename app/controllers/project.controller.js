@@ -37,14 +37,16 @@ module.exports = {
   create: async (req, res) => {
     try {
       const { startDate, endDate } = req.body;
-      const nextMonth10Date = moment(startDate)
+      const nextMonth3Date = moment(endDate)
         .date(3)
         .month(moment(startDate).month() + 1);
       let reportingStatus = "late";
-      if (Math.abs(moment(startDate).diff(moment(endDate), "days")) <= 6) {
-        reportingStatus = "early";
-      } else if (moment(endDate).diff(nextMonth10Date) <= 0) {
-        reportingStatus = "on_time";
+      if (moment().diff(nextMonth3Date) <= 0) {
+        if (Math.abs(moment(endDate).diff(moment(), "days")) <= 7) {
+          reportingStatus = "early";
+        } else {
+          reportingStatus = "on_time";
+        }
       }
       const projectId = `RCBKB${moment().year()}${Date.now()}`;
       const project = await new Project({
