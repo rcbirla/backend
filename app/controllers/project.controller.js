@@ -41,7 +41,7 @@ module.exports = {
         .date(3)
         .month(moment(startDate).month() + 1);
       let reportingStatus = "late";
-      if (Math.abs(moment(startDate).diff(moment(endDate), "days") <= 6)) {
+      if (Math.abs(moment(startDate).diff(moment(endDate), "days")) <= 6) {
         reportingStatus = "early";
       } else if (moment(endDate).diff(nextMonth10Date) <= 0) {
         reportingStatus = "on_time";
