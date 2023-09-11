@@ -30,7 +30,7 @@ module.exports = {
       } else if (moment(endDate).diff(nextMonth10Date) <= 0) {
         reportingStatus = "on_time";
       }
-      const projectId = `PROJ${moment().year()}${Date.now()}`;
+      const projectId = `RCBKB${moment().year()}${Date.now()}`;
       const project = await new Project({
         ...req.body,
         reportingStatus,
