@@ -57,7 +57,7 @@ const ProjectSchema = new mongoose.Schema(
     },
     reportingStatus: {
       type: String,
-      enum: ["early", "on_time", "late"],
+      enum: ["early", "on time", "late"],
       required: true,
     },
     level: {

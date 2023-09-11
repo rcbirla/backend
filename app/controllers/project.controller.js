@@ -16,6 +16,24 @@ function getReportingQuarter(month) {
       return "QUARTER 4";
   }
 }
+
+function getReportingStatus(startDate, endDate) {
+  const nextMonth3Date = moment(endDate)
+    .date(3)
+    .month(moment(startDate).month() + 1);
+  let reportingStatus = "late";
+  // Reporting time is more than 3rd of expected month
+  if (moment().diff(nextMonth3Date) > 0) {
+    reportingStatus = "late";
+  } else if (moment().diff(nextMonth3Date) <= 0) {
+    if (Math.abs(moment(endDate).diff(moment(), "days")) <= 7) {
+      reportingStatus = "early";
+    } else {
+      reportingStatus = "on time";
+    }
+  }
+  return reportingStatus;
+}
 module.exports = {
   getAll: async (req, res) => {
     try {
@@ -37,17 +55,7 @@ module.exports = {
   create: async (req, res) => {
     try {
       const { startDate, endDate } = req.body;
-      const nextMonth3Date = moment(endDate)
-        .date(3)
-        .month(moment(startDate).month() + 1);
-      let reportingStatus = "late";
-      if (moment().diff(nextMonth3Date) <= 0) {
-        if (Math.abs(moment(endDate).diff(moment(), "days")) <= 7) {
-          reportingStatus = "early";
-        } else {
-          reportingStatus = "on_time";
-        }
-      }
+      const reportingStatus = getReportingStatus(startDate, endDate);
       const projectId = `RCBKB${moment().year()}${Date.now()}`;
       const project = await new Project({
         ...req.body,
