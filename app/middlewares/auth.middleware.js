@@ -22,7 +22,7 @@ module.exports = (role) => async (req, res, next) => {
         req.user = userDoc;
         return next();
       }
-      return res.status(401).send({ message: "Unauthorized!" });
+      return res.status(403).send({ message: "Unauthorized!" });
     });
   } catch (error) {
     return res.status(500).send({ message: "Server error!" });
