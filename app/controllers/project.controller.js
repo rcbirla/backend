@@ -48,7 +48,10 @@ module.exports = {
     try {
       const { projectId } = req.params;
       const project = await Project.findById(projectId);
-      return res.send({ data: project });
+      if (project) {
+        return res.send({ data: project });
+      }
+      return res.status(404).send({ message: "Project not found!" });
     } catch (error) {
       return res.status(500).send({ message: error.message || "Server error" });
     }
@@ -86,7 +89,10 @@ module.exports = {
           new: true,
         }
       );
-      return res.send({ message: "Project updated!", data: project });
+      if (project) {
+        return res.send({ message: "Project updated!", data: project });
+      }
+      return res.status(404).send({ message: "Project not found!" });
     } catch (error) {
       return res.status(500).send({ message: error.message || "Server error" });
     }
